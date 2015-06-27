@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration name="log4j2_config"
+    status="debug"
+    strict="true"
+    monitorInterval="30">
+	
+	
+	<Appenders>
+		<Appender type="Console" name="CONSOLE">
+			<Layout type="PatternLayout" pattern="%m MDC%X%n"/>
+		</Appender>
+		
+		<Appender type="File" name="SERVICE_APPENDER" fileName="standalone/log/bm-services/bm-services.log">
+			<Layout type="PatternLayout">
+				<Pattern>%d %p %C{1.} [%t] %m%n</Pattern>
+			</Layout>
+		</Appender>
+	</Appenders>
+
+
+	<Loggers>
+		<Logger name="info.rlira" level="trace" additivity="false">
+			<AppenderRef ref="SERVICE_APPENDER" />
+		</Logger>
+		
+		
+		<Root level="error">
+			<AppenderRef ref="CONSOLE" />
+		</Root>
+	</Loggers>
+	
+</Configuration>
