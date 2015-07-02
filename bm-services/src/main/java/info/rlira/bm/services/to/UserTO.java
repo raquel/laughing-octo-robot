@@ -8,13 +8,12 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class UserTO implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -6890580708025770082L;
+
 	private String name;
 	private String email;
 	private String bands;
+	
 	public String getName() {
 		return name;
 	}
@@ -33,6 +32,7 @@ public class UserTO implements Serializable {
 	public void setBands(String bands) {
 		this.bands = bands;
 	}
+	
 	@Override
 	public int hashCode() {
 		return HashCodeBuilder.reflectionHashCode(this);

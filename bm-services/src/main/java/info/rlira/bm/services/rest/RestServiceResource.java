@@ -5,6 +5,7 @@ import info.rlira.bm.services.entity.Band;
 import info.rlira.bm.services.to.UserTO;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -23,6 +24,8 @@ public class RestServiceResource implements RestService {
 
 	private static final long serialVersionUID = -2282361129232650700L;
 	
+	private static final Logger logger = Logger.getLogger(RestServiceResource.class.getName());
+	
 	@Inject
 	private RestServiceBO bo;
 
@@ -33,31 +36,15 @@ public class RestServiceResource implements RestService {
 	}
 
 	@Override
-	public Response save(String email, String name, String bands) {
+	public Response saveUserVote(UserTO userTO) {
+		logger.info("New Object" + userTO.toString());
 		Response res;
-		if(bo.saveVote(email, name, bands))
-			res = Response.status(Response.Status.CREATED).build();
-		else
+		if(bo.saveVote(userTO)) {
+			UserTO ranking = bo.getUserRanking(userTO);
+			res = Response.status(Response.Status.CREATED).entity(ranking).build();
+		} else
 			res = Response.status(Response.Status.FORBIDDEN).build();
 		return res;
-	}
-
-	@Override
-	public Response ranking() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Response save() {
-		System.out.println("Entrou no bagulho");
-		return null;
-	}
-
-	@Override
-	public Response save(UserTO userTO) {
-		System.out.println(userTO.toString());
-		return null;
 	}
 
 }

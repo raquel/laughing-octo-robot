@@ -4,11 +4,16 @@ import info.rlira.bm.services.dao.BandDAO;
 import info.rlira.bm.services.dao.UserDAO;
 import info.rlira.bm.services.entity.Band;
 import info.rlira.bm.services.entity.User;
+import info.rlira.bm.services.to.BandTO;
+import info.rlira.bm.services.to.GeneralRankingTO;
+import info.rlira.bm.services.to.UserTO;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
 /**
@@ -26,6 +31,9 @@ public class RestServiceBO {
 	@Inject
 	private UserDAO userDAO;
 	
+    @Inject
+    private Event<GeneralRankingTO> event;
+    
 	private static final Logger logger = Logger.getLogger(RestServiceBO.class.getName());
 
 	public List<Band> getParticipatingBands(){
@@ -34,10 +42,13 @@ public class RestServiceBO {
 		return result;
 	}
 	
-	public Boolean saveVote(String email, String name, String bands) {
-		User user = saveUser(email, name);
-		//TODO colocar para salvar os votos
-		return true;
+	public Boolean saveVote(UserTO user) {
+		Boolean result = false;
+		User userResult = saveUser(user.getEmail(), user.getName());
+		//TODO Save the Votes
+		//Before return, send notification to websocket
+		startWebSocket(user);
+		return result;
 	}
 
 	private User saveUser(String email, String name) {
@@ -53,4 +64,15 @@ public class RestServiceBO {
 		return result;
 	}
 	
+	private void startWebSocket(UserTO user) {
+		List<BandTO> bands = new ArrayList<BandTO>();
+		//TODO montar rank das bandas com dados do banco de dados
+		GeneralRankingTO generalRankingTO = new GeneralRankingTO(user, bands);
+		event.fire(generalRankingTO);
+	}
+
+	public UserTO getUserRanking(UserTO userTO) {
+		// TODO Get all votes from on user and sumarize
+		return null;
+	}
 }

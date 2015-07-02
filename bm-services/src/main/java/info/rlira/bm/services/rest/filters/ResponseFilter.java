@@ -2,6 +2,7 @@ package info.rlira.bm.services.rest.filters;
 
 import java.io.IOException;
 import java.util.logging.Logger;
+
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
@@ -23,10 +24,10 @@ public class ResponseFilter implements ContainerResponseFilter {
     @Override
     public void filter( ContainerRequestContext requestCtx, ContainerResponseContext responseCtx ) throws IOException {
         log.info( "Executing REST response filter" );
-        responseCtx.getHeaders().add( "Access-Control-Allow-Origin", "*" );
+        responseCtx.getHeaders().add( "Access-Control-Allow-Origin", "*" );//TODO UPDATE AFTER DEFINITIVE URL FROM FRONT-END
         responseCtx.getHeaders().add( "Access-Control-Allow-Credentials", "true" );
-        responseCtx.getHeaders().add( "Access-Control-Allow-Methods", "GET, POST, DELETE, PUT" );
-        
-	
+        responseCtx.getHeaders().add( "Access-Control-Allow-Methods", "HEAD,GET,POST,PUT,DELETE,OPTIONS");
+        responseCtx.getHeaders().add( "Access-Control-Allow-Headers", "Content-Type,Origin,Accept,Authorization");
+        responseCtx.getHeaders().add("Access-Control-Max-Age", "120");
     }
 }

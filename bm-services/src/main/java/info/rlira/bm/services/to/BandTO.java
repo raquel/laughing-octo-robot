@@ -6,20 +6,22 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class Band implements Serializable {
+public class BandTO implements Serializable {
 
 	private static final long serialVersionUID = -4055445236675624185L;
 
 	private String name;
 	private String photo;
+	private Long votes;
 	
-	public Band() {
+	public BandTO() {
 	}
 	
-	public Band(String name, String photo) {
+	public BandTO(String name, String photo, Long votes) {
 		super();
 		this.name = name;
 		this.photo = photo;
+		this.votes = votes;
 	}
 	
 	public String getName() {
@@ -30,6 +32,14 @@ public class Band implements Serializable {
 		return photo;
 	}
 
+	public Long getVotes() {
+		return votes;
+	}
+
+	public void setVotes(Long votes) {
+		this.votes = votes;
+	}
+	
 	public void setName(String name) {
 		this.name = name;
 	}
