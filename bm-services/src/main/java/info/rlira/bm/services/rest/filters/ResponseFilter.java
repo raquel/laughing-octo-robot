@@ -26,5 +26,7 @@ public class ResponseFilter implements ContainerResponseFilter {
         responseCtx.getHeaders().add( "Access-Control-Allow-Origin", "*" );
         responseCtx.getHeaders().add( "Access-Control-Allow-Credentials", "true" );
         responseCtx.getHeaders().add( "Access-Control-Allow-Methods", "GET, POST, DELETE, PUT" );
+        
+	
     }
 }

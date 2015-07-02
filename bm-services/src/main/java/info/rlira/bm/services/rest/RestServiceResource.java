@@ -1,6 +1,10 @@
 package info.rlira.bm.services.rest;
 
 import info.rlira.bm.services.bo.RestServiceBO;
+import info.rlira.bm.services.entity.Band;
+import info.rlira.bm.services.to.UserTO;
+
+import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -20,22 +24,40 @@ public class RestServiceResource implements RestService {
 	private static final long serialVersionUID = -2282361129232650700L;
 	
 	@Inject
-	private RestServiceBO bean;
-	
+	private RestServiceBO bo;
+
 	@Override
-	public Response getTeste() {
-		String res = "Rest works!";
+	public Response getBands() {
+		List<Band> res = bo.getParticipatingBands();
 		return Response.status(Response.Status.OK).entity(res).build();
 	}
 
-	/**
-	 * FIXME Deletar
-	 */
 	@Override
-	public Response getValor(String datacenterId, String tenant, String serviceId, String serverId) {
-		String res = "Rest works!";
-		return Response.status(Response.Status.OK).entity(res).build();
+	public Response save(String email, String name, String bands) {
+		Response res;
+		if(bo.saveVote(email, name, bands))
+			res = Response.status(Response.Status.CREATED).build();
+		else
+			res = Response.status(Response.Status.FORBIDDEN).build();
+		return res;
 	}
 
+	@Override
+	public Response ranking() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Response save() {
+		System.out.println("Entrou no bagulho");
+		return null;
+	}
+
+	@Override
+	public Response save(UserTO userTO) {
+		System.out.println(userTO.toString());
+		return null;
+	}
 
 }

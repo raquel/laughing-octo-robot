@@ -1,17 +1,15 @@
 package info.rlira.bm.services.bo;
 
-import info.rlira.bm.services.dao.PortfolioTypeDAO;
-import info.rlira.bm.services.to.ResultTO;
+import info.rlira.bm.services.dao.BandDAO;
+import info.rlira.bm.services.dao.UserDAO;
+import info.rlira.bm.services.entity.Band;
+import info.rlira.bm.services.entity.User;
 
-import java.math.BigDecimal;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 /**
  * {@link }
@@ -21,27 +19,38 @@ import javax.persistence.PersistenceContext;
  */
 @Stateless
 public class RestServiceBO {
-
-	private static final Logger logger = Logger.getLogger(RestServiceBO.class.getName());
-
-	@PersistenceContext(unitName = "PostgreSQLDS")
-	private EntityManager em;
 	
 	@Inject
-	private PortfolioTypeDAO serviceTypeDAO;
+	private BandDAO bandDAO;
+	
+	@Inject
+	private UserDAO userDAO;
+	
+	private static final Logger logger = Logger.getLogger(RestServiceBO.class.getName());
 
-	public ResultTO recuperaValor(String datacenterId, String tenant, String serviceId, String serverId){
-		logger.info("Entrou no metodo para recuperar dados");
-		ResultTO result = new ResultTO();
-		//TODO putting the DAO doing something
-		result.setCalculatedValue(BigDecimal.TEN);
-		result.setUnitValue(BigDecimal.TEN);
-		logger.fine("Service value calculated with success. Resutl: " + result);
+	public List<Band> getParticipatingBands(){
+		logger.info("In method RestServiceBO.getParticipatingBands searching for list.");
+		List<Band> result = bandDAO.findAll();
 		return result;
 	}
-
-	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public void collectInstancesInformations() {
-		logger.info("Verifying the status of all instances are on.");
+	
+	public Boolean saveVote(String email, String name, String bands) {
+		User user = saveUser(email, name);
+		//TODO colocar para salvar os votos
+		return true;
 	}
+
+	private User saveUser(String email, String name) {
+		User result = new User();
+		User verify = userDAO.findByEmail(email);
+		if(verify.equals(null)) {
+			User user = new User();
+			user.setEmail(email);
+			user.setName(name);
+			result = userDAO.save(user);
+		} else
+			result = verify;
+		return result;
+	}
+	
 }

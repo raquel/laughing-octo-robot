@@ -24,8 +24,11 @@ public class RequestFilter implements ContainerRequestFilter {
     public void filter( ContainerRequestContext requestCtx ) throws IOException {
         log.info( "Executing REST request filter" );
         if ( requestCtx.getRequest().getMethod().equals( "OPTIONS" ) ) {
-            log.info( "HTTP Method (OPTIONS) - Detected!" );
-            requestCtx.abortWith( Response.status( Response.Status.OK ).build() );
+            log.info( "HTTP Method (OPTIONS) - Detected! " + requestCtx.getHeaders().get("Access-Control-Request-Method").toString());
+        	if(requestCtx.getHeaderString("Access-Control-Request-Method").equals("POST") && requestCtx.getUriInfo().getPath().equals("/save"))
+        		requestCtx.setMethod("POST");
+        	else
+        		requestCtx.abortWith( Response.status( Response.Status.OK ).build() );
         }
     }
 }

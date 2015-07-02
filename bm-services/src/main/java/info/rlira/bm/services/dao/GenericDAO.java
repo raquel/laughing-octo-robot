@@ -1,13 +1,9 @@
 package info.rlira.bm.services.dao;
 
-import info.rlira.bm.services.entity.AuditingModel;
-import info.rlira.bm.services.entity.Model;
-
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -24,9 +20,9 @@ import javax.persistence.TypedQuery;
  * @author Raquel Lira (raquel.lira@gmail.com) - 27.06.2015
  * 
  */
-public class GenericDAO<T extends Model, I extends Serializable> {
+public class GenericDAO<T, I extends Serializable> {
 
-	@PersistenceContext(unitName = "PostgreSQLDS")
+	@PersistenceContext(unitName = "MySQLDS")
 	protected EntityManager entityManager;
 	
 	protected Class<T> entityClass;
@@ -73,9 +69,7 @@ public class GenericDAO<T extends Model, I extends Serializable> {
 	 * @param entity
 	 * @return
 	 */
-	public AuditingModel save(AuditingModel entity) {
-		entity.setCreatedAt(new Date());
-		entity.setUpdatedAt(new Date());
+	public T save(T entity) {
 		entityManager.persist(entity);
 		return entity;
 	}
@@ -87,10 +81,9 @@ public class GenericDAO<T extends Model, I extends Serializable> {
 	 * @param entity
 	 * @return
 	 */
-	public AuditingModel saveAndFlush(AuditingModel entity) {
+	public T saveAndFlush(T entity) {
 		save(entity);
 		entityManager.flush();
-
 		return entity;
 	}
 
@@ -100,8 +93,8 @@ public class GenericDAO<T extends Model, I extends Serializable> {
 	 *
 	 * @param entityList
 	 */
-	public void save(Collection<AuditingModel> entityList) {
-		for (AuditingModel entity : entityList) {
+	public void save(Collection<T> entityList) {
+		for (T entity : entityList) {
 			save(entity);
 		}
 	}
@@ -112,7 +105,7 @@ public class GenericDAO<T extends Model, I extends Serializable> {
 	 *
 	 * @param entityList
 	 */
-	public void saveAndFlush(Collection<AuditingModel> entityList) {
+	public void saveAndFlush(Collection<T> entityList) {
 		save(entityList);
 		entityManager.flush();
 	}
@@ -126,8 +119,7 @@ public class GenericDAO<T extends Model, I extends Serializable> {
 	 * @param entity
 	 * @return
 	 */
-	public AuditingModel update(AuditingModel entity) {
-		entity.setUpdatedAt(new Date());
+	public T update(T entity) {
 		entityManager.merge(entity);
 		return entity;
 	}
@@ -139,7 +131,7 @@ public class GenericDAO<T extends Model, I extends Serializable> {
 	 * @param entity
 	 * @return
 	 */
-	public AuditingModel updateAndFlush(AuditingModel entity) {
+	public T updateAndFlush(T entity) {
 		update(entity);
 		entityManager.flush();
 		return entity;
@@ -151,8 +143,8 @@ public class GenericDAO<T extends Model, I extends Serializable> {
 	 *
 	 * @param entityList
 	 */
-	public void update(Collection<AuditingModel> entityList) {
-		for (AuditingModel entity : entityList) {
+	public void update(Collection<T> entityList) {
+		for (T entity : entityList) {
 			update(entity);
 		}
 	}
@@ -163,7 +155,7 @@ public class GenericDAO<T extends Model, I extends Serializable> {
 	 *
 	 * @param entityList
 	 */
-	public void updateAndFlush(Collection<AuditingModel> entityList) {
+	public void updateAndFlush(Collection<T> entityList) {
 		update(entityList);
 		entityManager.flush();
 	}
@@ -248,7 +240,7 @@ public class GenericDAO<T extends Model, I extends Serializable> {
 	 * @return {@link List}&lt;T&gt;
 	 */
 	public List<T> findByNativeQuery(String query, Map<String, Object> params) {
-		Query q = getEntityManager().createNativeQuery(query, entityClass);
+		Query q = getEntityManager().createNativeQuery(query, entityClass); 
 
 		for (String key : params.keySet()) {
 			q.setParameter(key, params.get(key));
@@ -285,7 +277,7 @@ public class GenericDAO<T extends Model, I extends Serializable> {
 	 * @param parametros
 	 * @return
 	 */
-	public List<T> findSingleByQuery(String query, Map<String, Object> parametros) {
+	public T findSingleByQuery(String query, Map<String, Object> parametros) {
 		Query q = getEntityManager().createQuery(query);
 
 		if ((parametros != null) && !parametros.isEmpty()) {
@@ -294,9 +286,8 @@ public class GenericDAO<T extends Model, I extends Serializable> {
 			}
 		}
 
-		return q.getResultList();
+		return (T)q.getSingleResult();
 	}
-	
 	/**
 	 * {@link GenericDAO#searchWithPaginationQueryJPQL}
 	 *
@@ -309,7 +300,7 @@ public class GenericDAO<T extends Model, I extends Serializable> {
 	 * @throws Exception
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public <T> List<T> searchWithPaginationQueryJPQL(int pagina, int qtdRegistrosPorPagina, String jpql, Map<String, Object> parametros) throws Exception{
+	public List<T> searchWithPaginationQueryJPQL(int pagina, int qtdRegistrosPorPagina, String jpql, Map<String, Object> parametros) throws Exception{
 		try {
 			TypedQuery<T> query = (TypedQuery<T>)  getEntityManager().createQuery(jpql);
 			Iterator it = parametros.entrySet().iterator();
