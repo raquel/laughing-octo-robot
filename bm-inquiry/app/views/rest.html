@@ -1,0 +1,47 @@
+<div class="container">
+
+
+    <div class="panel panel-danger">
+        <div class="panel-heading"><h2>Teste REST com Produto</h2></div>
+        <ul class="list-group">
+            <li class="list-group-item">
+                <div class="input-group">
+                    <span class="input-group-addon">ID: </span>
+                    <input type="text" ng-model="newID" class="form-control">
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="input-group">
+                    <span class="input-group-addon">NOME: </span>
+                    <input type="text" ng-model="newName" class="form-control">
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="input-group">
+                    <span class="input-group-addon">CATEGORIA: </span>
+                    <input type="text" ng-model="newCategory" class="form-control">
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="input-group">
+                    <span class="input-group-addon">PRECO: </span>
+                    <input type="text" ng-model="newValue" class="form-control">
+                </div>
+            </li>
+            <li class="list-group-item text-center">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-warning" ng-click="instGetCall()">GET</button>
+                    <button type="button" class="btn btn-warning" ng-click="instSaveCall()">SAVE</button>
+                    <button type="button" class="btn btn-warning" ng-click="instDeleteCall()">DELETE</button>
+                    <button type="button" class="btn btn-warning" ng-click="instPutCall()">PUT</button>
+                </div>
+            </li>
+            <li class="list-group-item">
+                {{(instCallResult.$resolved ? (instCallResult | json) : "")}}
+            </li>
+        </ul>
+    </div>
+</div>
+ Ainda resiste para tirar dúvidas
+<button ng-click="getWithParams(true)">GET call with SUCCESS</button><br />
+{{getWithParamsResult}}
