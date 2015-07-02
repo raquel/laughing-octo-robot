@@ -1,23 +1,27 @@
-<div class="jumbotron">
-  <h1>'Allo, 'Allo!</h1>
-  <p class="lead">
-    <img src="images/yeoman.png" alt="I'm Yeoman"><br>
-    Always a pleasure scaffolding your apps.
-  </p>
-  <p><a class="btn btn-lg btn-success" ng-href="#/">Splendid!<span class="glyphicon glyphicon-ok"></span></a></p>
-</div>
-
-<div class="row marketing">
-  <h4>HTML5 Boilerplate</h4>
-  <p>
-    HTML5 Boilerplate is a professional front-end template for building fast, robust, and adaptable web apps or sites.
-  </p>
-
-  <h4>Angular</h4>
-  <p>
-    AngularJS is a toolset for building the framework most suited to your application development.
-  </p>
-
-  <h4>Karma</h4>
-  <p>Spectacular Test Runner for JavaScript.</p>
+<div class="container">
+  <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Ranking das bandas</h3>
+    </div>
+    <div class="panel-body">
+      <p>O ultimo voto foi de  {{ lastUserVotes.name }} e-mail {{ lastUserVotes.email }} para as bandas:</p>
+      <ul ng-repeat="lubands in lastUserVotes.bands">
+        <li>{{band.name}}</li>
+      </ul>
+    </div>
+    <table class="table table-striped table-bordered table-hover">
+      <thead>
+        <th>Colocação</th>
+        <th>Banda</th>
+        <th>Total de Votos</th>
+      </thead>
+      <tbody>
+        <tr ng-repeat="band in bands | orderBy : 'votes'">
+          <td>{{ $index + 1 }}</td>
+          <td>{{band.name}}</td>
+          <td>{{band.votes}}</td>
+        </tr>
+      </tbody>
+    </table>
 </div>
